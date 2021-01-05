@@ -4,9 +4,11 @@
 #include <ctime>
 #include "ToroidalWindow.h"
 #include "ShipModel.h"
+#include "AsterModel.h"
 #include "Model.h"
 
 ToroidalWindow* pWindow;
+std::vector<Model*> NextFrameModels;
 bool g_keys[256];
 
 void procKeyMessage(MSG msg) {
@@ -34,6 +36,14 @@ bool procSysMsg() {
         }
     }
     return true;
+}
+
+void ResolveCollisions(std::vector<Model*>& models) {
+    typedef std::vector<Model*>::iterator Models;
+    for (Models it = models.begin(); it != models.end(); it++) {
+
+       // for ()
+    }
 }
 
 int WINAPI WinMain(HINSTANCE hThisInstance,
@@ -67,12 +77,11 @@ int WINAPI WinMain(HINSTANCE hThisInstance,
     shipMesh.push_back({ -0.5f, -.5f });
 
     std::vector<Model*> models;
-
     //create models of asteroids
 
     models.push_back(new ShipModel(&shipMesh, 200.f, 150.f, 10.f));
-    models.push_back(new Model(&mesh, 10.f, 10.f, 50.f, 0.2f, 0.2f));
-    models.push_back(new Model(&mesh, 100.f, 49.f, 20.f, 0.2f));
+    models.push_back(new AsterModel(&mesh, 10.f, 10.f, 50.f, 0.2f, 0.2f));
+    models.push_back(new AsterModel(&mesh, 100.f, 49.f, 20.f, 0.2f));
 
     while (true) {
         if (!procSysMsg()) {
@@ -80,8 +89,19 @@ int WINAPI WinMain(HINSTANCE hThisInstance,
         }
 
         pWindow->clearColor(0, 0, 0);
+
+        for (std::vector<Model*>::iterator it = NextFrameModels.begin(); it != NextFrameModels.end(); it++) {
+            models.push_back(*it);
+        }
+        NextFrameModels.clear();
+
         for (std::vector<Model*>::iterator it = models.begin(); it != models.end(); it++) {
             (*it)->update();
+        }
+
+        //ResolveCollisions(models);
+
+        for (std::vector<Model*>::iterator it = models.begin(); it != models.end(); it++) {
             (*it)->draw(pWindow);
         }
         pWindow->redraw();

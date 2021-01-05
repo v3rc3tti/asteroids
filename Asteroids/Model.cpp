@@ -1,6 +1,16 @@
 #include <vector>
 #include "Model.h"
 
+Model::Model(float x, float y, float dx, float dy) {
+	m_x = x;
+	m_y = y;
+	m_dx = dx;
+	m_dy = dy;
+	m_mesh = new std::vector<Vec2>(); //TODO: Alloc
+	m_scale = 0.f;
+	m_angle = 0.f;
+}
+
 Model::Model(std::vector<Vec2>* mesh, float x, float y, float scale, float dx, float dy) {
 	m_x = x;
 	m_y = y;
@@ -39,6 +49,10 @@ void Model::setSpeed(Vec2 s) {
 	m_dy = s.y;
 }
 
+float Model::getScale() {
+	return m_scale;
+}
+
 void Model::update() {
 	m_x += m_dx;
 	m_y += m_dy;
@@ -60,17 +74,22 @@ void Model::draw(PixelWindow* pWindow) {
 		m_y -= pWindow->getHeight();
 	}
 
-	std::vector<Vec2>* points = new std::vector<Vec2>(*m_mesh);
-	rotate(*points, m_angle);
-	scale(*points, m_scale);
-	translate(*points, m_x, m_y);
+	if (m_mesh->size() > 0) {
+		std::vector<Vec2>* points = new std::vector<Vec2>(*m_mesh);
+		rotate(*points, m_angle);
+		scale(*points, m_scale);
+		translate(*points, m_x, m_y);
 
-	for (int i = 0; i < points->size(); i++) {
-		Vec2 p1 = (*points)[i];
-		Vec2 p2 = (*points)[(i + 1) % points->size()];
-		pWindow->drawLine(p1.x, p1.y, p2.x, p2.y, 255, 255, 255);
+		for (int i = 0; i < points->size(); i++) {
+			Vec2 p1 = (*points)[i];
+			Vec2 p2 = (*points)[(i + 1) % points->size()];
+			pWindow->drawLine(p1.x, p1.y, p2.x, p2.y, 255, 255, 255);
+		}
+		delete points;
 	}
-	delete points;
+	else {
+		pWindow->drawPixel(m_x, m_y, 255, 255, 255);
+	}
 }
 
 void Model::scale(std::vector<Vec2>& v, float scale) {
