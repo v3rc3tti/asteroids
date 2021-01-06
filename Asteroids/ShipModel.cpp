@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "ShipModel.h"
 #include "BulletModel.h"
+#include "Game.h"
 
 extern bool g_keys[];
 extern std::vector<Model*> NextFrameModels;
@@ -11,15 +12,15 @@ ShipModel::ShipModel(std::vector<Vec2>* mesh, float x, float y, float scale, flo
 
 void ShipModel::update() {
     //rotation
-    if (g_keys[VK_LEFT]) {
+    if (g_pGame->g_keys[VK_LEFT]) {
         setAngle(getAngle() - 0.1f);
     }
-    else if (g_keys[VK_RIGHT]) {
+    else if (g_pGame->g_keys[VK_RIGHT]) {
         setAngle(getAngle() + 0.1f);
     }
 
     //thrust
-    if (g_keys[VK_UP]) {
+    if (g_pGame->g_keys[VK_UP]) {
         float angle = getAngle();
         float dx = cosf(angle) * 0.05f;
         float dy = sinf(angle) * 0.05f;
@@ -30,13 +31,13 @@ void ShipModel::update() {
     }
 
     static bool wasSpaceDown = true;
-    if (g_keys[VK_SPACE] && wasSpaceDown) {
+    if (g_pGame->g_keys[VK_SPACE] && wasSpaceDown) {
         wasSpaceDown = false;
         float bulletDx = cosf(getAngle()) * 5.f;
         float bulletDy = sinf(getAngle()) * 5.f;
-        NextFrameModels.push_back(new BulletModel(m_x, m_y, bulletDx, bulletDy));
+        g_pGame->NextFrameModels.push_back(new BulletModel(m_x, m_y, bulletDx, bulletDy));
     }
-    else if (!g_keys[VK_SPACE]) {
+    else if (!g_pGame->g_keys[VK_SPACE]) {
         wasSpaceDown = true;
     }
 
