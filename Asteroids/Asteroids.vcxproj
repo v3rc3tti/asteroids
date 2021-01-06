@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="AsterModel.cpp" />
     <ClCompile Include="BulletModel.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ShipModel.cpp" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="AsterModel.h" />
     <ClInclude Include="BulletModel.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="ShipModel.h" />

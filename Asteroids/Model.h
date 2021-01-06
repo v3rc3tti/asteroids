@@ -14,6 +14,8 @@ enum class ModelType {
 
 class Model {
 public:
+	bool isDead = false;
+
 	Model(float x = 0.f, float y = 0.f, float dx = 0.f, float dy = 0.f);
 	Model(std::vector<Vec2>* mesh, float x = 0.f, float y = 0.f, float scale = 1.f, float dx = 0.f, float dy = 0.f);
 	Vec2 getPos();
@@ -25,7 +27,7 @@ public:
 	float getScale();
 	virtual void update();
 	virtual void draw(PixelWindow* pWindow);
-
+	virtual ModelType getType() = 0;
 protected:
 
 	float m_x;

@@ -42,3 +42,7 @@ void ShipModel::update() {
 
     Model::update();
 }
+
+ModelType ShipModel::getType() {
+    return ModelType::SHIP;
+}
